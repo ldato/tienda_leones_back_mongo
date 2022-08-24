@@ -19,9 +19,24 @@ const findAll = async () => {
     return articulos;
 }
 
+const findByCodigo = async (codigo) => {
+    const articulo = await Articulo.findOne({codigo: codigo});
+    return articulo
+}
 
+const updatePrecios = async (codigo, data) => {
+    const articulo = await Articulo.updateOne(
+        {codigo: codigo}, {$set: {
+            "precioCosto": data.precioCosto,  
+            "precioVenta": data.precioVenta
+        }}
+    )
+    return articulo;
+}
 
 module.exports = {
     create,
-    findAll
+    findAll,
+    findByCodigo,
+    updatePrecios
 }

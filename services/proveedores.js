@@ -17,7 +17,25 @@ const findAll = async () => {
     return proveedores;
 }
 
+const findByName = async (nombre) => {
+    const proveedor = await Proveedor.findOne({nombre: nombre});
+    return proveedor;
+}
+
+const update = async (nombre, data) => {
+    const proveedor = await Proveedor.updateOne(
+        {nombre: nombre}, {$set: {
+            "nombre": data.nombre, 
+            "telefono": data.telefono,
+            "email": data.email
+        }
+    })
+    return proveedor;
+}
+
 module.exports = {
     create,
-    findAll
+    findAll,
+    findByName,
+    update
 }

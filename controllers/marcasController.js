@@ -1,4 +1,4 @@
-const {create} = require('../services/marcas');
+const {create, getAll} = require('../services/marcas');
 
 const crearMarca = async (req, res) => {
     const {nombre} = req.body;
@@ -16,6 +16,19 @@ const crearMarca = async (req, res) => {
     }
 }
 
+const verMarcas = async (req, res) => {
+    try {
+        const marcas = await getAll();
+        return res.status(200).json(marcas);
+    } catch (error) {
+        return res.status(400).json({
+            message: "Ha ocurrido un error al consultar las marcas",
+            error: error
+        });
+    }
+}
+
 module.exports = {
-    crearMarca
+    crearMarca,
+    verMarcas
 }

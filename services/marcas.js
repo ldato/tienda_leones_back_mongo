@@ -10,6 +10,12 @@ const create = async (nombre) => {
     return marcaCreada;
 }
 
+const getAll = async () => {
+    const marcas = await Marca.find();
+    return marcas;
+}
+
 module.exports = {
-    create
+    create,
+    getAll
 }
