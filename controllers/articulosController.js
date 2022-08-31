@@ -41,8 +41,9 @@ const buscarUno = async (req, res) => {
         const articulo = await findByCodigo(codigo);
         return res.status(200).json(articulo);
     } catch (error) {
+        console.log(error)
         return res.status(400).json({
-            message: "Ha ocurrido al consultar el codigo de articulo",
+            message: "Ha ocurrido un error al consultar el codigo de articulo",
             error: error
         })
     }

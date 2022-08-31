@@ -23,6 +23,10 @@ const Articulo = new Schema({
     precioCosto:{
         type: Number,
         required: true
+    },
+    cantidad:{
+        type:Number,
+        default: 0
     }
 });
 

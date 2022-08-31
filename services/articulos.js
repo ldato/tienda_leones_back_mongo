@@ -1,5 +1,6 @@
 require('../connection');
 const Articulo = require('../models/Articulo');
+const Marca = require('../models/Marca');
 
 const create = async (data) => {
     const nuevoArticulo = new Articulo({
@@ -7,7 +8,8 @@ const create = async (data) => {
         marca: data.marca,
         proveedor: data.proveedor,
         precioVenta: data.precioVenta,
-        precioCosto: data.precioCosto
+        precioCosto: data.precioCosto,
+        cantidad: data.cantidad
     }) 
 
     const articuloCreado = await nuevoArticulo.save();
@@ -19,9 +21,15 @@ const findAll = async () => {
     return articulos;
 }
 
+// const findByCodigo = async (codigo) => {
+//     const articulo = await Articulo.findOne({codigo: codigo});
+//     return articulo
+// }
+
 const findByCodigo = async (codigo) => {
-    const articulo = await Articulo.findOne({codigo: codigo});
-    return articulo
+    const articulo = await Articulo.findOne({codigo: codigo})
+    .populate('marca').lean();
+    return articulo;
 }
 
 const updatePrecios = async (codigo, data) => {
