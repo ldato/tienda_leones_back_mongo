@@ -1,11 +1,11 @@
+const Articulo = require('../models/Articulo');
 const {
-    create, 
-    findAll, 
-    findByCodigo, 
-    updatePrecioVenta,
-    updatePrecioCosto,
-    updatePrecios
-    } = require('../services/articulos');
+    create,
+    findAll,
+    findByCodigo,
+    updatePrecios,
+    findByCodigoAndUpdate
+} = require('../services/articulos');
 
 const crearArticulo = async (req, res) => {
     const articulo = req.body;
@@ -23,7 +23,24 @@ const crearArticulo = async (req, res) => {
     }
 }
 
-const buscarTodos = async (req, res) => {  
+const buscarUnoYActualizar = async (req, res) => {
+    const data = req.body;
+    try {
+        const nuevaCantidad = await findByCodigoAndUpdate(data.codigo, data.cantidad);
+        return res.status(401).json({
+            message: "El artículo fue actualizado correctamente",
+            articulo: nuevaCantidad
+        })
+    } catch (error) {
+        return res.status(400).json({
+            message: "Ha ocurrido un error al actualizar el artículo",
+            error: error
+        })
+    }
+
+}
+
+const buscarTodos = async (req, res) => {
     try {
         const articulos = await findAll();
         return res.status(200).json(articulos);
@@ -36,7 +53,7 @@ const buscarTodos = async (req, res) => {
 }
 
 const buscarUno = async (req, res) => {
-    const {codigo} = req.params;
+    const { codigo } = req.params;
     try {
         const articulo = await findByCodigo(codigo);
         return res.status(200).json(articulo);
@@ -47,37 +64,38 @@ const buscarUno = async (req, res) => {
             error: error
         })
     }
-} 
+}
 
 const actualizarPrecios = async (req, res) => {
-    const {codigo} = req.params;
+    const { codigo } = req.params;
     const data = req.body;
     try {
         const articulo = await findByCodigo(codigo);
-    if (!articulo) {
-        return res.status(404).json({
-            message: "No se encontro un articulo con el codigo provisto"
-        })
-    }
-    const updateArticulo = {
-        precioVenta: !data.precioVenta ? articulo.precioVenta : data.precioVenta,
-        precioCosto: !data.precioCosto ? articulo.precioCosto : data.precioCosto
-    }
-    const articuloUpdate = await updatePrecios(codigo, data);
-    return res.status(200).json(articuloUpdate);
+        if (!articulo) {
+            return res.status(404).json({
+                message: "No se encontro un articulo con el codigo provisto"
+            })
+        }
+        const updateArticulo = {
+            precioVenta: !data.precioVenta ? articulo.precioVenta : data.precioVenta,
+            precioCosto: !data.precioCosto ? articulo.precioCosto : data.precioCosto
+        }
+        const articuloUpdate = await updatePrecios(codigo, data);
+        return res.status(200).json(articuloUpdate);
     } catch (error) {
         return res.status(400).json({
             message: "Ha ocurrido un error al actualizar los precios del articulo",
             error: error
         })
     }
-    
-    
+
+
 }
 
 module.exports = {
     crearArticulo,
     buscarTodos,
     buscarUno,
-    actualizarPrecios
+    actualizarPrecios,
+    buscarUnoYActualizar
 }

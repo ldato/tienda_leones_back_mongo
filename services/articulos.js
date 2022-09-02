@@ -9,11 +9,20 @@ const create = async (data) => {
         proveedor: data.proveedor,
         precioVenta: data.precioVenta,
         precioCosto: data.precioCosto,
-        cantidad: data.cantidad
+        cantidad: data.cantidad,
+        tipo: data.tipo
     }) 
 
     const articuloCreado = await nuevoArticulo.save();
     return articuloCreado;
+}
+
+const findByCodigoAndUpdate = async (codigo, cantidad) => {
+    const nuevaCantidad = await Articulo.findOneAndUpdate(
+        {codigo: codigo}, 
+        {$inc: {cantidad: cantidad}}
+        )
+    return nuevaCantidad;
 }
 
 const findAll = async () => {
@@ -46,5 +55,6 @@ module.exports = {
     create,
     findAll,
     findByCodigo,
-    updatePrecios
+    updatePrecios,
+    findByCodigoAndUpdate
 }

@@ -27,6 +27,10 @@ const Articulo = new Schema({
     cantidad:{
         type:Number,
         default: 0
+    },
+    tipo:{
+        type: String,
+        default: "Sin tipo"
     }
 });
 
