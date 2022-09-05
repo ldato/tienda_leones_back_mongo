@@ -34,7 +34,8 @@ const verClientePorDni = async (req, res) => {
         const cliente = await getClientePorDni(dni);
         if (!cliente) {
             return res.status(404).json({
-                message: "No se ha encontrado un cliente con el DNI especificado"
+                message: "No se ha encontrado un cliente con el DNI especificado",
+                error: 404
             })
         }
         return res.status(200).json(cliente);

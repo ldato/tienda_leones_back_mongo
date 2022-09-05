@@ -54,10 +54,18 @@ const buscarTodos = async (req, res) => {
 
 const buscarUno = async (req, res) => {
     const { codigo } = req.params;
-    try {
+    try {        
         const articulo = await findByCodigo(codigo);
-        return res.status(200).json(articulo);
-    } catch (error) {
+        console.log(articulo);
+        if (articulo === null) {
+            return res.status(404).json({
+                message: "No se encontro el articulo con el codigo provisto",
+                error: 404
+            })
+        }
+        return res.status(200).json(articulo);       
+    }
+    catch (error) {
         console.log(error)
         return res.status(400).json({
             message: "Ha ocurrido un error al consultar el codigo de articulo",
